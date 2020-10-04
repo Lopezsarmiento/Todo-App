@@ -1,26 +1,49 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Title from "./common/title";
 import Section from "./common/section";
+import { GlobalContext } from "../context/GlobalState";
 
 const AddTodo = () => {
+  const [todo, setTodo] = useState("");
+  const { addTodo } = useContext(GlobalContext);
+
+  const onSubmit = (e) => {
+    // prevents page reload
+    e.preventDefault();
+
+    // creates new todo obj
+    const newTodo = {
+      id: "abcde",
+      title: todo,
+      isCompleted: false,
+    };
+    //save todo in state
+    addTodo(newTodo);
+    // clear input after submission
+    setTodo("");
+  };
+
   return (
     <Section>
       <Title title="Add new todo"></Title>
       <div className="col-sm-12">
-        <div className="input-group mb-2">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="type in"
-            aria-label="todo with one button addons"
-            aria-describedby="button-addon4"
-          />
-          <div className="input-group-append" id="button-addon4">
-            <button className="btn btn-info" type="button">
-              Add todo
-            </button>
+        <form className="mb-3" onSubmit={onSubmit}>
+          <div className="form-group">
+            <input
+              type="text"
+              className="form-control"
+              id="inputtodo"
+              aria-describedby="todo"
+              placeholder="Enter task..."
+              value={todo}
+              onChange={(e) => setTodo(e.target.value)}
+            />
           </div>
-        </div>
+
+          <button type="submit" className="btn btn-info btn-lg btn-block">
+            Add
+          </button>
+        </form>
       </div>
     </Section>
   );

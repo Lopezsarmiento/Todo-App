@@ -5,15 +5,18 @@ import Header from "./components/header";
 import Layout from "./components/common/layout";
 import Report from "./components/report";
 import TodoList from "./components/todoList";
+import { GlobalProvider } from "./context/GlobalState";
 
 function App() {
   return (
-    <Layout>
-      <Header></Header>
-      <Report></Report>
-      <TodoList></TodoList>
-      <AddTodo></AddTodo>
-    </Layout>
+    <GlobalProvider>
+      <Layout>
+        <Header></Header>
+        <Report></Report>
+        <TodoList></TodoList>
+        <AddTodo></AddTodo>
+      </Layout>
+    </GlobalProvider>
   );
 }
 

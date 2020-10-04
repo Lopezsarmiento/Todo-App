@@ -1,28 +1,38 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "../context/GlobalState";
 
-const Todo = () => {
+const Todo = ({ todo }) => {
+  const { deleteTodo } = useContext(GlobalContext);
+  const status = todo.isCompleted
+    ? "row border-left border-success"
+    : "row border-left border-danger";
+  console.log("todo in toto: ", todo);
   return (
-    <div className="col-sm-12">
-      <div className="input-group mb-2">
-        <div className="input-group-prepend" id="button-addon4">
-          <button className="btn btn-danger" type="button">
-            X
-          </button>
+    <li className="list-group-item text-left shadow mb-2 rounded">
+      <div className={status}>
+        <div className="col-sm-8">
+          <p>{todo.title}</p>
         </div>
-        <input
-          type="text"
-          className="form-control"
-          value="buy milk"
-          aria-label="Recipient's username with two button addons"
-          aria-describedby="button-addon4"
-        />
-        <div className="input-group-append" id="button-addon4">
-          <button className="btn btn-warning" type="button">
-            Edit
-          </button>
+        <div className="col-sm-4">
+          <span className="float-right">
+            <button
+              type="button"
+              className="btn btn-outline-warning"
+              onClick={() => deleteTodo(todo._id)}
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-danger ml-1"
+              onClick={() => deleteTodo(todo._id)}
+            >
+              x
+            </button>
+          </span>
         </div>
       </div>
-    </div>
+    </li>
   );
 };
 
