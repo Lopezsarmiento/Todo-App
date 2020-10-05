@@ -13,7 +13,6 @@ const AddTodo = () => {
 
     // creates new todo obj
     const newTodo = {
-      id: "abcde",
       title: todo,
       isCompleted: false,
     };

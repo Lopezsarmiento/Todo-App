@@ -46,6 +46,46 @@ export const GlobalProvider = ({ children }) => {
     } catch (error) {
       dispatch({
         type: "TODO_ERROR",
+        payload: error.response.data,
+      });
+    }
+  };
+  const updateTodo = async (todo) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    // update isCompleted value
+    const updatedTodo = {
+      id: todo._id,
+      title: todo.title,
+      isCompleted: !todo.isCompleted,
+    };
+
+    try {
+      // call backend api
+      const res = await axios.put(
+        `http://localhost:4000/api/update/${updatedTodo.id}`,
+        updatedTodo,
+        config
+      );
+
+      // update specific todo
+      const todos = [...state.todos];
+      const index = todos.indexOf(todo);
+      todos[index] = { ...todos[index] };
+      todos[index].isCompleted = !todos[index].isCompleted;
+
+      // update in local state
+      dispatch({
+        type: "UPDATE_TODO",
+        payload: todos,
+      });
+    } catch (error) {
+      dispatch({
+        type: "TODO_ERROR",
         payload: error,
       });
     }
@@ -57,7 +97,6 @@ export const GlobalProvider = ({ children }) => {
       const { data } = await axios.delete(
         `http://localhost:4000/api/delete/${id}`
       );
-      console.log("deletion response: ", data);
       // delete in local state
       dispatch({
         type: "DELETE_TODO",
@@ -66,16 +105,37 @@ export const GlobalProvider = ({ children }) => {
     } catch (error) {
       dispatch({
         type: "TODO_ERROR",
-        payload: error,
+        payload: error.response.data,
       });
     }
   };
 
-  const addTodo = (todo) => {
-    dispatch({
-      type: "ADD_TODO",
-      payload: todo,
-    });
+  const addTodo = async (todo) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    // call api
+    try {
+      const { data } = await axios.post(
+        "http://localhost:4000/api/create",
+        todo,
+        config
+      );
+
+      // save new todo in local state
+      dispatch({
+        type: "ADD_TODO",
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: "TODO_ERROR",
+        payload: error.response.data,
+      });
+    }
   };
 
   return (
@@ -87,6 +147,7 @@ export const GlobalProvider = ({ children }) => {
         deleteTodo,
         addTodo,
         getTodos,
+        updateTodo,
       }}
     >
       {children}

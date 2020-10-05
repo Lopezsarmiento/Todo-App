@@ -11,6 +11,11 @@ export default (state, action) => {
         ...state,
         todos: state.todos.filter((todo) => todo._id !== action.payload),
       };
+    case "UPDATE_TODO":
+      return {
+        ...state,
+        todos: action.payload,
+      };
     case "ADD_TODO":
       return {
         ...state,
