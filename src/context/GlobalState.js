@@ -25,6 +25,13 @@ const initialState = {
   loading: true,
 };
 
+const rest = {
+  create: "http://localhost:4000/api/create",
+  get: "http://localhost:4000/api/todos",
+  delete: "http://localhost:4000/api/delete/",
+  update: "http://localhost:4000/api/update/",
+};
+
 // create global context
 export const GlobalContext = createContext(initialState);
 
@@ -37,7 +44,7 @@ export const GlobalProvider = ({ children }) => {
     // get todos from backend
     try {
       // call backend api
-      const { data } = await axios.get("http://localhost:4000/api/todos");
+      const { data } = await axios.get(rest.get);
       // save response in local state
       dispatch({
         type: "GET_TODOS",
@@ -66,11 +73,7 @@ export const GlobalProvider = ({ children }) => {
 
     try {
       // call backend api
-      const res = await axios.put(
-        `http://localhost:4000/api/update/${updatedTodo.id}`,
-        updatedTodo,
-        config
-      );
+      await axios.put(`${rest.update}${updatedTodo.id}`, updatedTodo, config);
 
       // update specific todo
       const todos = [...state.todos];
@@ -94,9 +97,7 @@ export const GlobalProvider = ({ children }) => {
   const deleteTodo = async (id) => {
     try {
       // call backend api
-      const { data } = await axios.delete(
-        `http://localhost:4000/api/delete/${id}`
-      );
+      await axios.delete(`${rest.delete}${id}`);
       // delete in local state
       dispatch({
         type: "DELETE_TODO",
@@ -119,11 +120,7 @@ export const GlobalProvider = ({ children }) => {
 
     // call api
     try {
-      const { data } = await axios.post(
-        "http://localhost:4000/api/create",
-        todo,
-        config
-      );
+      const { data } = await axios.post(rest.create, todo, config);
 
       // save new todo in local state
       dispatch({
